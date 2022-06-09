@@ -1,10 +1,12 @@
-const axios = require("axios");
 const dotenv = require("dotenv");
+const AWS = require("aws-sdk");
 
 dotenv.config();
 
 const express = require("express");
 const app = express();
+
+const s3 = new AWS();
 
 app.get("/", (req, res) => {
     res.send("Hello World");
