@@ -1,3 +1,4 @@
+const axios = require("axios");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -5,14 +6,12 @@ dotenv.config();
 const express = require("express");
 const app = express();
 
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: CLOUD_API_KEY,
-    api_secret: CLOUD_SECRET,
+app.get("/", (req, res) => {
+    res.send("Hello World");
 });
 
-app.get("/", function (req, res) {
-    res.send("Hello World");
+app.post(`/image_upload/upload`, (req, res) => {
+    console.log(req);
 });
 
 app.listen(process.env.PORT);
