@@ -4,10 +4,13 @@ const AWS = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
 const bodyParser = require("body-parser");
 const { Readable } = require("stream");
+const cors = require("cors");
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
@@ -30,10 +33,8 @@ app.post(
 
         s3.upload(params, (error, data) => {
             if (error) {
-                console.log(error);
                 res.send({ message: "Could not upload image", error: error });
             } else {
-                console.log(data);
                 res.send({ imgName: imgName });
             }
         });
