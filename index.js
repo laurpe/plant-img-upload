@@ -14,10 +14,6 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.AWS_S3_ACCESS_KEY_SECRET,
 });
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
-});
-
 app.post(
     "/api/upload",
     bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
@@ -42,26 +38,5 @@ app.post(
         });
     }
 );
-
-// app.post("/api/upload", (req, res) => {
-
-//     const imgName = uuidv4();
-
-//     fs.stat(req.body, (err, file_info) => {
-//         const bodyStream = fs.createReadStream(req.body);
-
-//         upload(imgName, bodyStream, file_info.size);
-//     });
-
-//     TODO: how to pass binary data to bucket?
-
-//     try {
-//         upload(imgName, file);
-//         res.send("img uuid");
-//     } catch (error) {
-//         res.status(500);
-//         res.send("Could not upload image");
-//     }
-// });
 
 app.listen(process.env.PORT);
