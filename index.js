@@ -31,6 +31,7 @@ app.post(
         s3.upload(params, (error, data) => {
             if (error) {
                 console.log(error);
+                res.send({ message: "Could not upload image", error: error });
             } else {
                 console.log(data);
                 res.send({ imgName: imgName });
