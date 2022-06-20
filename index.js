@@ -35,7 +35,7 @@ app.post(
             if (error) {
                 res.send({ message: "Could not upload image", error: error });
             } else {
-                res.send({ imgName: imgName, helloMessage: "hellohello" });
+                res.send({ imgName: imgName, helloMessage: "hello" });
             }
         });
     }
