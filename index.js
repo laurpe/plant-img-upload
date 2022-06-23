@@ -43,4 +43,4 @@ app.post(
 
 app.listen(process.env.PORT);
 
-module.exports.handler = app;
+exports.handler = app;
