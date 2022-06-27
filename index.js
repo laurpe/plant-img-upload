@@ -18,8 +18,6 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.AWS_S3_ACCESS_KEY_SECRET,
 });
 
-console.log("event: ", util.inspect(event, { showHidden: false, depth: null }));
-
 app.post(
     "/api/upload",
     bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
