@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { Readable } = require("stream");
 const cors = require("cors");
 
-exports.handler = async function (event, context, callback) {
+exports.handler = function (event, context, callback) {
     dotenv.config();
 
     const app = express();
@@ -17,6 +17,8 @@ exports.handler = async function (event, context, callback) {
         accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_S3_ACCESS_KEY_SECRET,
     });
+
+    console.log(JSON.stringify(event));
 
     app.post(
         "/api/upload",
