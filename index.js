@@ -36,12 +36,20 @@ exports.handler = function (event, context, callback) {
 
             s3.upload(params, (error, data) => {
                 if (error) {
-                    callback({
-                        message: "Could not upload image",
-                        error: error,
+                    callback(null, {
+                        statusCode: 500,
+                        body: {
+                            message: "Could not upload image",
+                            error: error,
+                        },
+                        headers: { "Content-Type": "application/json" },
                     });
                 } else {
-                    callback({ imgName: imgName });
+                    callback(null, {
+                        statusCode: 200,
+                        body: JSON.stringify({ imgName: imgName }),
+                        headers: { "Content-Type": "application/json" },
+                    });
                 }
             });
         }
