@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { Readable } = require("stream");
 const cors = require("cors");
 
-exports.handler = function (event, context, callback) {
+exports.handler = async function (event, context, callback) {
     dotenv.config();
 
     const app = express();
