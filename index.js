@@ -5,53 +5,41 @@ const { v4: uuidv4 } = require("uuid");
 const bodyParser = require("body-parser");
 const { Readable } = require("stream");
 const cors = require("cors");
+const serverless = require("serverless-http");
 
-exports.handler = function (event, context, callback) {
-    dotenv.config();
+dotenv.config();
 
-    const app = express();
+const app = express();
 
-    app.use(cors());
+app.use(cors());
 
-    const s3 = new AWS.S3({
-        accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_S3_ACCESS_KEY_SECRET,
-    });
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_S3_ACCESS_KEY_SECRET,
+});
 
-    console.log(JSON.stringify(event));
+app.post(
+    "/api/upload",
+    bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
+    (req, res) => {
+        const fileStream = Readable.from(req.body);
 
-    app.post(
-        "/api/upload",
-        bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
-        (req, res) => {
-            const fileStream = Readable.from(req.body);
+        const imgName = uuidv4();
 
-            const imgName = uuidv4();
+        const params = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: imgName,
+            Body: fileStream,
+        };
 
-            const params = {
-                Bucket: process.env.AWS_S3_BUCKET_NAME,
-                Key: imgName,
-                Body: fileStream,
-            };
+        s3.upload(params, (error, data) => {
+            if (error) {
+                res.send({ message: "Could not upload image", error: error });
+            } else {
+                res.send({ imgName: imgName });
+            }
+        });
+    }
+);
 
-            s3.upload(params, (error, data) => {
-                if (error) {
-                    callback(null, {
-                        statusCode: 500,
-                        body: {
-                            message: "Could not upload image",
-                            error: error,
-                        },
-                        headers: { "Content-Type": "application/json" },
-                    });
-                } else {
-                    callback(null, {
-                        statusCode: 200,
-                        body: JSON.stringify({ imgName: imgName }),
-                        headers: { "Content-Type": "application/json" },
-                    });
-                }
-            });
-        }
-    );
-};
+module.exports.handler = serverless(app);
