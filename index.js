@@ -34,12 +34,12 @@ exports.handler = async function (event, context) {
 
             s3.upload(params, (error, data) => {
                 if (error) {
-                    res.send({
+                    return {
                         message: "Could not upload image",
                         error: error,
-                    });
+                    };
                 } else {
-                    res.send({ imgName: imgName, helloMessage: "hellohello" });
+                    return { imgName: imgName };
                 }
             });
         }
