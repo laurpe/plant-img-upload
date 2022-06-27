@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { Readable } = require("stream");
 const cors = require("cors");
 
-exports.handler = async function (event, context) {
+exports.handler = function (event, context, callback) {
     dotenv.config();
 
     const app = express();
@@ -34,12 +34,12 @@ exports.handler = async function (event, context) {
 
             s3.upload(params, (error, data) => {
                 if (error) {
-                    return {
+                    callback({
                         message: "Could not upload image",
                         error: error,
-                    };
+                    });
                 } else {
-                    return { imgName: imgName };
+                    callback({ imgName: imgName });
                 }
             });
         }
