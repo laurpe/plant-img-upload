@@ -1,4 +1,4 @@
-# Plant Tracker API
+# Plant Tracker image upload API
 
 ## About this repository
 
